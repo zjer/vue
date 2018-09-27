@@ -17,11 +17,7 @@
     name: "index",
     components: {FooterBottom, HeaderTop},
     data() {
-      return {msg: 'vue模板页'}
+      return {}
     }
   }
 </script>
-
-<style scoped lang=less>
-
-</style>

@@ -6,11 +6,7 @@
   export default {
     name: "headerTop",
     data() {
-      return {msg: 'vue模板页'}
+      return {msg: '头部'}
     }
   }
 </script>
-
-<style scoped lang=less>
-
-</style>

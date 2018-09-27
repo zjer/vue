@@ -102,9 +102,38 @@ body {
   zoom: 1;
 }
 
-.back_img {
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+//transform上下左右居中
+.ctt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+//定位上下居中
+.tb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+//定位左右居中
+.lr {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+//定位全屏
+.allcover{
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+.fontReset {
+  font-weight: normal;
+  font-style: normal;
 }
 
 .margin {

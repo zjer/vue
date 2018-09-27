@@ -1,9 +1,24 @@
 @import 'common';
 
 //注册登录
-.signIn {}
-
-.signUp {}
+.sign {
+  .wh(100%, 100vh);
+  .bip('../assets/img/sign_bg.jpg');
+  .bis(auto, 100vh);
+  .el-main {
+    .margin();
+    .signIn, .signUp {
+      .wh(400px, auto);
+      background-color: #ffffff;
+      padding: 20px 50px 20px 40px;
+      .sign-title {
+        .fontReset();
+        line-height: 30px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
 
 
 

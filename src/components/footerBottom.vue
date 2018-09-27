@@ -6,11 +6,7 @@
   export default {
     name: "footerBottom",
     data() {
-      return {msg: 'vue模板页'}
+      return {msg: '底部'}
     }
   }
 </script>
-
-<style scoped lang=less>
-
-</style>

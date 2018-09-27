@@ -14,12 +14,12 @@ export default new Router({
       component: Sign
     },
     {
-      path: 'index',
+      path: '/index',
       name: 'index',
       component: Index
     },
     {
-      path: 'echart',
+      path: '/echart',
       name: 'echart',
       component: Echart
     }
