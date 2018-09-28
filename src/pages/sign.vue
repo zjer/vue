@@ -14,9 +14,6 @@
           <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" v-model="ruleForm1.checkPass" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="昵称" prop="nick">
-            <el-input type="text" v-model="ruleForm1.nick" autocomplete="off"></el-input>
-          </el-form-item>
           <el-form-item>
             <span @click="toSign">已有账号，前往登陆</span>
           </el-form-item>
@@ -32,7 +29,7 @@
           <el-form-item label="账号" prop="user">
             <el-input type="text" v-model="ruleForm2.user" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="pass">
+          <el-form-item label="密码" prop="pass" ref="clearPassValidate">
             <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item>
@@ -49,6 +46,9 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from 'vuex';
+  import { setStore } from "../config/mUtils";
+
   export default {
     name: "sign",
     data() {
@@ -82,21 +82,13 @@
           callback();
         }
       };
-      var validateNick = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请输入昵称'));
-        } else {
-          callback();
-        }
-      };
       return {
         toSignIn: true,
         toSignUp: false,
         ruleForm1: {
           user: '',
           pass: '',
-          checkPass: '',
-          nick: ''
+          checkPass: ''
         },
         ruleForm2: {
           user: '',
@@ -111,9 +103,6 @@
           ],
           checkPass: [
             { validator: validatePass2, trigger: 'blur' }
-          ],
-          nick: [
-            { validator: validateNick, trigger: 'blur' }
           ]
         },
         rules2: {
@@ -126,25 +115,95 @@
         }
       }
     },
+    mounted() {
+      if (!this.adminInfo.id) {
+        this.getAdminData();
+      }
+    },
+    computed: {
+      ...mapState(['adminInfo'])
+    },
     methods: {
-      toSign() {
+      ...mapActions(["getAdminData"]),
+      async toSign() {
         this.toSignIn = !this.toSignIn;
         this.toSignUp = !this.toSignUp;
       },
-      submitSignInForm(formName) {
+      async submitSignInForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            let params = new URLSearchParams();
+            params.append('uName', this.ruleForm1.user);
+            params.append('uPass', this.ruleForm1.pass);
+            this.$http.post('api/user/regist.do', params).then((res) => {
+              console.log(res.data);
+              if (res.data.state == 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg,
+                  duration: 1000
+                });
+                setTimeout(() => {
+                  this.toSign();
+                }, 1000);
+              } else if (res.data.state == 1) {
+                this.$message({
+                  type: 'error',
+                  message: res.data.msg,
+                  duration: 1000
+                });
+                setTimeout(() => {
+                  this.resetForm('ruleForm1');
+                }, 1000);
+              }
+            })
           } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-      submitSignUpForm(formName) {
+      async submitSignUpForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$router.push('/index');
+            let params = new URLSearchParams();
+            params.append('uName', this.ruleForm2.user);
+            params.append('uPass', this.ruleForm2.pass);
+            this.$http.post(baseUrl, params).then((res) => {
+              // console.log(res.data);
+              if (res.data.state == 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg,
+                  duration: 1000
+                });
+                setStore('user', res.data.data.name);
+                setTimeout(() => {
+                  this.$router.push('/index');
+                }, 1000);
+              } else if (res.data.state == 1) {
+                this.$message({
+                  type: 'error',
+                  message: res.data.msg,
+                  duration: 1000
+                });
+                setTimeout(() => {
+                  this.toSign();
+                }, 1000);
+              } else if (res.data.state == 2) {
+                this.$message({
+                  type: 'error',
+                  message: res.data.msg,
+                  duration: 1000
+                });
+                setTimeout(() => {
+                  this.ruleForm2.pass = '';
+                }, 1000);
+              }
+            }).catch((res) => {
+              console.log(res.data.msg);
+            })
+
           } else {
             console.log('error submit!!');
             return false;
