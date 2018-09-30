@@ -1,6 +1,5 @@
 <template>
   <el-container class="sign">
-    <el-header></el-header>
     <el-main>
       <div class="signIn" v-show="toSignIn">
         <h2 class="sign-title">用户注册</h2>
@@ -159,14 +158,13 @@
             params.append('uName', this.ruleForm2.user);
             params.append('uPass', this.ruleForm2.pass);
             this.$ajax.post('api/user/login.do', params).then((res) => {
-              // console.log(res.data);
+              console.log(res.data);
               if (res.data.state == 0) {
                 this.$message({
                   type: 'success',
                   message: res.data.msg,
                   duration: 1000
                 });
-                setStore('user', res.data.data.name);
                 setTimeout(() => {
                   this.$router.push('/index');
                 }, 1000);
@@ -187,6 +185,7 @@
                 });
                 setTimeout(() => {
                   this.ruleForm2.pass = '';
+                  this.clearPassValidate();
                 }, 1000);
               }
             }).catch((res) => {
@@ -201,6 +200,9 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      clearPassValidate() {
+        this.$refs['clearPassValidate'].clearValidate();
       }
     }
   }
