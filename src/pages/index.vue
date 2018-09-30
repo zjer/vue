@@ -3,7 +3,13 @@
     <el-header>
       <header-top></header-top>
     </el-header>
-    <el-main></el-main>
+    <el-main>
+      <el-carousel :interval="5000" arrow="always">
+        <el-carousel-item v-for="item in 4" :key="item">
+          <h3>{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
+    </el-main>
     <el-footer>
       <footer-bottom></footer-bottom>
     </el-footer>
